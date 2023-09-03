@@ -1,0 +1,19 @@
+source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby "3.1.2"
+
+# railsの起動時間を短縮する（標準gem）
+gem "bootsnap", require: false
+
+# MySQLに接続する
+gem "mysql2", "~> 0.5"
+
+# pumaサーバーを使えるようにする（標準gem）
+gem "puma", "~> 5.0"
+
+# rails本体（標準gem）
+gem "rails", "~> 7.0.4"
+
+# タイムゾーン情報を提供する（標準gem）
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
