@@ -6,11 +6,17 @@ ruby "3.1.2"
 # railsの起動時間を短縮する（標準gem）
 gem "bootsnap", require: false
 
+# 環境毎の設定管理を行う
+gem "config"
+
 # MySQLに接続する
 gem "mysql2", "~> 0.5"
 
 # pumaサーバーを使えるようにする（標準gem）
 gem "puma", "~> 5.0"
+
+# cors設定を管理する
+gem 'rack-cors'
 
 # rails本体（標準gem）
 gem "rails", "~> 7.0.4"
