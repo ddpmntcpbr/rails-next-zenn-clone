@@ -9,6 +9,15 @@ gem "bootsnap", require: false
 # 環境毎の設定管理を行う
 gem "config"
 
+# ユーザー認証を提供する
+gem "devise"
+
+# devise を日本語化する
+gem "devise-i18n"
+
+# ユーザーのトークン認証を提供する
+gem "devise_token_auth"
+
 # MySQLに接続する
 gem "mysql2", "~> 0.5"
 
@@ -25,6 +34,9 @@ gem "rails", "~> 7.0.4"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
+  # 開発環境でメール送信をテストする
+  gem "letter_opener_web"
+
   # pry コンソールを使えるようにする。
   gem "pry-byebug"
   gem "pry-doc"
