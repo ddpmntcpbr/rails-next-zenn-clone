@@ -1,0 +1,65 @@
+Rails:
+  Enabled: true
+
+Rails/ActiveRecordCallbacksOrder:
+  Enabled: true
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/Exit:
+  Enabled: false
+
+Rails/FindById:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/Inquiry:
+  Enabled: false
+
+Rails/MailerName:
+  Enabled: true
+
+Rails/MatchRoute:
+  Enabled: false
+
+Rails/NegateInclude:
+  Enabled: false
+
+Rails/Pluck:
+  Enabled: false
+
+Rails/PluckInWhere:
+  Enabled: false
+
+Rails/Present:
+  Enabled: false
+
+Rails/RenderInline:
+  Enabled: false
+
+Rails/RenderPlainText:
+  Enabled: false
+
+Rails/SafeNavigation:
+  ConvertTry: true
+
+Rails/SaveBang:
+  Enabled: true
+
+Rails/ShortI18n:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development # rubocop default.yml
+    - test # rubocop default.yml
+    - production # rubocop default.yml
+
+Rails/WhereExists:
+  Enabled: false
