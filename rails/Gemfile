@@ -33,6 +33,9 @@ gem 'rack-cors'
 # rails本体（標準gem）
 gem "rails", "~> 7.0.4"
 
+# メッセージを日本語化
+gem "rails-i18n"
+
 # タイムゾーン情報を提供する（標準gem）
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
