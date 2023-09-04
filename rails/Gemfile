@@ -21,6 +21,9 @@ gem "devise-i18n"
 # ユーザーのトークン認証を提供する
 gem "devise_token_auth"
 
+# enum を日本語化する
+gem "enum_help"
+
 # ページネーション機能を提供する
 gem "kaminari"
 
