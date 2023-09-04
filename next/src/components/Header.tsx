@@ -27,19 +27,21 @@ const Header = () => {
             </Link>
           </Box>
           <Box>
-            <Button
-              color="primary"
-              variant="contained"
-              sx={{
-                color: 'white',
-                textTransform: 'none',
-                fontSize: 16,
-                borderRadius: 2,
-                boxShadow: 'none',
-              }}
-            >
-              Sign in
-            </Button>
+            <Link href="/sign_in">
+              <Button
+                color="primary"
+                variant="contained"
+                sx={{
+                  color: 'white',
+                  textTransform: 'none',
+                  fontSize: 16,
+                  borderRadius: 2,
+                  boxShadow: 'none',
+                }}
+              >
+                Sign in
+              </Button>
+            </Link>
             <Button
               color="primary"
               variant="outlined"
