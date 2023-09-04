@@ -34,7 +34,7 @@ gem "mysql2", "~> 0.5"
 gem "puma", "~> 5.0"
 
 # cors設定を管理する
-gem 'rack-cors'
+gem "rack-cors"
 
 # rails本体（標準gem）
 gem "rails", "~> 7.0.4"
