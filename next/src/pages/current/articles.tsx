@@ -120,13 +120,15 @@ const CurrentArticles: NextPage = () => {
                   )}
                 </>
                 <Box>
-                  <Avatar>
-                    <Tooltip title="編集する">
-                      <IconButton sx={{ backgroundColor: '#F1F5FA' }}>
-                        <EditIcon sx={{ color: '#99AAB6' }} />
-                      </IconButton>
-                    </Tooltip>
-                  </Avatar>
+                  <Link href={'/current/articles/edit/' + article.id}>
+                    <Avatar>
+                      <Tooltip title="編集する">
+                        <IconButton sx={{ backgroundColor: '#F1F5FA' }}>
+                          <EditIcon sx={{ color: '#99AAB6' }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Avatar>
+                  </Link>
                 </Box>
                 <Box>
                   <Link href={'/current/articles/' + article.id}>
