@@ -1,0 +1,124 @@
+# CIチェックが通ること確認した上で、Rails, Next を自動デプロイ
+name: Continuous Delivery
+
+# 当 workflow 実行タイミング
+# main ブランチにコード差分が push されたときのみ
+on:
+  push:
+    branches: [ "main" ]
+
+# 当 workflow 内で使用できる変数を定義
+# $AWS_REGION のような形で参照可能
+env:
+  AWS_REGION: ap-northeast-1
+  ECS_CLUSTER: zenn-clone-cluster
+  ECS_SERVICE_BACKEND: zenn-clone-backend-service
+  ECS_SERVICE_FRONTEND: zenn-clone-frontend-service
+  ECS_TASK_DEFINITION_BACKEND: ./rails/task-definition.json
+  ECS_TASK_DEFINITION_FRONTEND: ./next/task-definition.json
+  ECR_REPOSITORY_RAILS: zenn-clone-rails
+  ECR_REPOSITORY_NEXT: zenn-clone-next
+  CONTAINER_NAME_RAILS: rails
+  CONTAINER_NAME_NEXT: next
+
+# ECR push するための権限設定
+permissions:
+  contents: read
+
+# 当 workflow が行う処理
+jobs:
+  # 処理① ci.yml によるチェック
+  ci:
+    uses: ./.github/workflows/ci.yml
+  # 処理② Railsの自動デプロイ。動作には ci のクリアが必要
+  deploy-rails:
+    needs: [ci]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./rails/Dockerfile.prod ./rails
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
+        container-name: ${{ env.CONTAINER_NAME_RAILS }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_BACKEND }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+  # 処理③ Railsの自動デプロイ。動作には ci のクリアが必要
+  deploy-next:
+    needs: [ci]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG -f ./next/Dockerfile.prod ./next
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
+        container-name: ${{ env.CONTAINER_NAME_NEXT }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_FRONTEND }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
