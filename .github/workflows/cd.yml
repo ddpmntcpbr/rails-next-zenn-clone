@@ -3,9 +3,11 @@ name: Continuous Delivery
 
 # 当 workflow 実行タイミング
 # main ブランチにコード差分が push されたときのみ
-on:
-  push:
-    branches: [ "main" ]
+
+# CDパイプライン動作させる場合は、以下3行のコメントアウトを解除
+# on:
+#   push:
+#     branches: [ "main" ]
 
 # 当 workflow 内で使用できる変数を定義
 # $AWS_REGION のような形で参照可能
