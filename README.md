@@ -1,6 +1,6 @@
 ## このリポジトリは？
 
-zennで有料販売されている書籍『【独学ポートフォリオ開発応援】実務未経験から学べる！Rails×Next.js×AWSハンズオン解説』での開発アプリです。
+zennで有料販売されている書籍[『【独学ポートフォリオ開発応援】実務未経験から学べる！Rails×Next.js×AWSハンズオン解説』](https://zenn.dev/ddpmntcpbr/books/rna-hands-on)での開発アプリです。
 
 ## 技術スタック
 
@@ -9,6 +9,10 @@ zennで有料販売されている書籍『【独学ポートフォリオ開発�
 - Ruby on Rails
   - rspec
   - rubocop
+  - devise/devise_token_auth
+  - kaminari
+  - bullet
+  - rack-cors
 - Nginx(Production)
 
 ### Frontend
@@ -17,6 +21,7 @@ zennで有料販売されている書籍『【独学ポートフォリオ開発�
   - eslint/prettier
   - Typescript
   - Material-UI(v5)
+  - emotion
 
 ### Infra
 
@@ -24,7 +29,6 @@ zennで有料販売されている書籍『【独学ポートフォリオ開発�
 - AWS
   - ECS Fargate
 - GithubAction
-  - CI/CD pipeline
 
 ## 開発アプリ概要
 
