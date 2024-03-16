@@ -14,7 +14,7 @@ services:
   rails:
     build:
       context: ./rails
-    command: bash -c "tail -f log/development.log"
+    command: bash -c "touch log/development.log && tail -f log/development.log"
     volumes:
       - ./rails:/myapp
     ports:
